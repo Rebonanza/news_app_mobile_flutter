@@ -1,41 +1,85 @@
-//Now let's create the article model
-// for that we just need to copy the property from the json structure
-// and make a dart object
+class ArticleModel {
+  final String? status;
+  final int? totalResults;
+  final List<Articles>? articles;
 
-import 'source_model.dart';
+  ArticleModel({
+    this.status,
+    this.totalResults,
+    this.articles,
+  });
 
-class Article {
-  Source source;
-  String author;
-  String title;
-  String description;
-  String url;
-  String urlToImage;
-  String publishedAt;
-  String content;
+  ArticleModel.fromJson(Map<String, dynamic> json)
+      : status = json['status'] as String?,
+        totalResults = json['totalResults'] as int?,
+        articles = (json['articles'] as List?)
+            ?.map((dynamic e) => Articles.fromJson(e as Map<String, dynamic>))
+            .toList();
 
-  //Now let's create the constructor
-  Article(
-      {required this.source,
-      required this.author,
-      required this.title,
-      required this.description,
-      required this.url,
-      required this.urlToImage,
-      required this.publishedAt,
-      required this.content});
+  Map<String, dynamic> toJson() => {
+        'status': status,
+        'totalResults': totalResults,
+        'articles': articles?.map((e) => e.toJson()).toList()
+      };
+}
 
-  //And now let's create the function that will map the json into a list
-  factory Article.fromJson(Map<String, dynamic> json) {
-    return Article(
-      source: Source.fromJson(json['source']),
-      author: json['author'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      url: json['url'] as String,
-      urlToImage: json['urlToImage'] as String,
-      publishedAt: json['publishedAt'] as String,
-      content: json['content'] as String,
-    );
-  }
+class Articles {
+  final Source? source;
+  final String? author;
+  final String? title;
+  final dynamic description;
+  final String? url;
+  final dynamic urlToImage;
+  final String? publishedAt;
+  final dynamic content;
+
+  Articles({
+    this.source,
+    this.author,
+    this.title,
+    this.description,
+    this.url,
+    this.urlToImage,
+    this.publishedAt,
+    this.content,
+  });
+
+  Articles.fromJson(Map<String, dynamic> json)
+      : source = (json['source'] as Map<String, dynamic>?) != null
+            ? Source.fromJson(json['source'] as Map<String, dynamic>)
+            : null,
+        author = json['author'] as String?,
+        title = json['title'] as String?,
+        description = json['description'],
+        url = json['url'] as String?,
+        urlToImage = json['urlToImage'],
+        publishedAt = json['publishedAt'] as String?,
+        content = json['content'];
+
+  Map<String, dynamic> toJson() => {
+        'source': source?.toJson(),
+        'author': author,
+        'title': title,
+        'description': description,
+        'url': url,
+        'urlToImage': urlToImage,
+        'publishedAt': publishedAt,
+        'content': content
+      };
+}
+
+class Source {
+  final String? id;
+  final String? name;
+
+  Source({
+    this.id,
+    this.name,
+  });
+
+  Source.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String?,
+        name = json['name'] as String?;
+
+  Map<String, dynamic> toJson() => {'id': id, 'name': name};
 }
